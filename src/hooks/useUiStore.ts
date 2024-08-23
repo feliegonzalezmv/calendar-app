@@ -1,9 +1,13 @@
-import { useDispatch, useSelector } from "react-redux";
-import { onOpenDateModal, onCloseDateModal } from "../store";
+import {
+  onOpenDateModal,
+  onCloseDateModal,
+  useAppDispatch,
+  useAppSelector,
+} from "../store";
 
 export const useUiStore = () => {
-  const dispatch = useDispatch();
-  const { isDateModalOpen } = useSelector((state) => state.ui);
+  const dispatch = useAppDispatch();
+  const { isDateModalOpen } = useAppSelector((state) => state.ui);
 
   const openDateModal = () => {
     dispatch(onOpenDateModal());
