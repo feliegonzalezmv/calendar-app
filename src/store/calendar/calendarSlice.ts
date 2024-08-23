@@ -3,6 +3,7 @@ import { addHours } from "date-fns";
 import { CustomEvent } from "../../types/customTypes";
 
 const tempEvent: CustomEvent = {
+  _id: new Date().getTime(),
   title: "Boss birthday",
   start: new Date(),
   end: addHours(new Date(), 2),
@@ -15,14 +16,14 @@ export const calendarSlice = createSlice({
   name: "calendar",
   initialState: {
     events: [tempEvent],
-    activeEvent: null,
+    activeEvent: tempEvent,
   },
   reducers: {
-    getEvents: (state) => {
-      state.events = { ...state.events };
+    onSetActiveEvent: (state, { payload }) => {
+      state.activeEvent = payload;
     },
   },
 });
 
-export const { getEvents } = calendarSlice.actions;
+export const { onSetActiveEvent } = calendarSlice.actions;
 export default calendarSlice.reducer;

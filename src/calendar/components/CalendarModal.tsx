@@ -1,12 +1,19 @@
 import { addHours, differenceInSeconds } from "date-fns";
-import { ChangeEvent, SyntheticEvent, useMemo, useState } from "react";
+import {
+  ChangeEvent,
+  SyntheticEvent,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import Modal from "react-modal";
 import DatePicker from "react-datepicker";
 import Swal from "sweetalert2";
 
 import "react-datepicker/dist/react-datepicker.css";
 import "sweetalert2/dist/sweetalert2.min.css";
-import { useUiStore } from "../../hooks";
+import { useCalendarStore, useUiStore } from "../../hooks";
+import { CustomEvent } from "../../types/customTypes";
 
 const customStyles = {
   content: {
@@ -23,12 +30,16 @@ Modal.setAppElement("#root");
 
 export const CalendarModal = () => {
   const { isDateModalOpen, closeDateModal } = useUiStore();
+  const { activeEvent } = useCalendarStore();
 
-  const [formValues, setFormValues] = useState({
-    title: "Felipe",
-    notes: "Gonzalez",
+  const [formValues, setFormValues] = useState<CustomEvent>({
+    _id: new Date().getTime(),
+    title: "",
     start: new Date(),
     end: addHours(new Date(), 2),
+    notes: "",
+    bgColor: "",
+    user: { _id: "", name: "" },
   });
 
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -37,6 +48,12 @@ export const CalendarModal = () => {
     if (!formSubmitted) return "";
     return formValues.title.length > 0 ? "is-valid" : "is-invalid";
   }, [formSubmitted, formValues.title]);
+
+  useEffect(() => {
+    if (Object.keys(activeEvent).length > 0) {
+      setFormValues({ ...activeEvent });
+    }
+  }, [activeEvent]);
 
   const onInputChange = ({
     target,
