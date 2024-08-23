@@ -1,4 +1,11 @@
-import { onSetActiveEvent, useAppDispatch, useAppSelector } from "../store";
+import {
+  onSetActiveEvent,
+  onAddNewEvent,
+  onUpdateEvent,
+  onDeleteEvent,
+  useAppDispatch,
+  useAppSelector,
+} from "../store";
 import { CustomEvent } from "../types/customTypes";
 
 export const useCalendarStore = () => {
@@ -9,9 +16,22 @@ export const useCalendarStore = () => {
     dispatch(onSetActiveEvent(calendarEvent));
   };
 
+  const starSavingEvent = async (calendarEvent: CustomEvent) => {
+    if (calendarEvent._id) {
+      dispatch(onUpdateEvent({ ...calendarEvent }));
+    } else {
+      dispatch(onAddNewEvent({ ...calendarEvent, _id: new Date().getTime() }));
+    }
+  };
+
+  const startDeletingEvent = () => dispatch(onDeleteEvent());
+
   return {
     activeEvent,
     events,
+    hasEventSelected: !!activeEvent,
+    startDeletingEvent,
     setActiveEvent,
+    starSavingEvent,
   };
 };

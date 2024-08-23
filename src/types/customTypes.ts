@@ -4,7 +4,7 @@ export type User = {
 };
 
 export type CustomEvent = {
-  _id: number;
+  _id?: number;
   title: string;
   start: Date;
   end: Date;

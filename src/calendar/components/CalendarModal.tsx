@@ -30,16 +30,12 @@ Modal.setAppElement("#root");
 
 export const CalendarModal = () => {
   const { isDateModalOpen, closeDateModal } = useUiStore();
-  const { activeEvent } = useCalendarStore();
+  const { activeEvent, starSavingEvent } = useCalendarStore();
 
   const [formValues, setFormValues] = useState<CustomEvent>({
-    _id: new Date().getTime(),
     title: "",
     start: new Date(),
     end: addHours(new Date(), 2),
-    notes: "",
-    bgColor: "",
-    user: { _id: "", name: "" },
   });
 
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -50,7 +46,7 @@ export const CalendarModal = () => {
   }, [formSubmitted, formValues.title]);
 
   useEffect(() => {
-    if (Object.keys(activeEvent).length > 0) {
+    if (activeEvent !== null) {
       setFormValues({ ...activeEvent });
     }
   }, [activeEvent]);
@@ -69,7 +65,7 @@ export const CalendarModal = () => {
 
   const onCloseModal = () => closeDateModal();
 
-  const onSubmit = (e: SyntheticEvent) => {
+  const onSubmit = async (e: SyntheticEvent) => {
     e?.preventDefault();
     setFormSubmitted(true);
 
@@ -85,10 +81,9 @@ export const CalendarModal = () => {
 
     console.log("formValues :>> ", formValues);
 
-    //TODO
-
-    //CLose modal
-    //Remove screen errors
+    await starSavingEvent(formValues);
+    closeDateModal();
+    setFormSubmitted(false);
   };
   return (
     <Modal
