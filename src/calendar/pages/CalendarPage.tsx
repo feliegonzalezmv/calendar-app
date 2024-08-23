@@ -8,6 +8,7 @@ import { CalendarEvent } from "../components/CalendarEvent";
 import { CustomEvent } from "../../types/customTypes";
 import { useState } from "react";
 import { CalendarModal } from "../components/CalendarModal";
+import { useUiStore } from "../../hooks";
 
 const events: CustomEvent[] = [
   {
@@ -21,6 +22,7 @@ const events: CustomEvent[] = [
 ];
 
 export const CalendarPage = () => {
+  const { openDateModal } = useUiStore();
   const [lastView, setLastView] = useState<View>(
     (localStorage.getItem("lastView") as View) || "week"
   );
@@ -35,8 +37,8 @@ export const CalendarPage = () => {
     return { style };
   };
 
-  const onDoubleClick = (event: CustomEvent) => {
-    console.log({ doubleClick: event });
+  const onDoubleClick = () => {
+    openDateModal();
   };
 
   const onSelect = (event: CustomEvent) => {
